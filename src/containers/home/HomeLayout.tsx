@@ -7,12 +7,15 @@ import {
   TabPanel,
   Heading,
   TabProps,
+  Box,
+  Grid,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import InterviewSettings from "./InterviewSettingsForm";
-import JobDetails from "./JobDetailsForm";
-import RequistionForm from "./RequistionDetailsForm";
-import DisplayCard from "../../components/DisplayCard";
+import InterviewSettingsForm from "./InterviewSettingsForm";
+import JobDetailsForm from "./JobDetailsForm";
+import RequisitionForm from "./RequisitionDetailsForm";
+import DisplayCard from "./PreviewCard";
+import { PageNumbers } from "../../interface/home";
 
 const CustomTab: React.FC<TabProps> = ({ children, ...props }) => {
   return (
@@ -23,8 +26,6 @@ const CustomTab: React.FC<TabProps> = ({ children, ...props }) => {
 };
 
 const HomeLayout = () => {
-  type PageNumbers = 0 | 1 | 2;
-
   const [page, setPage] = useState<PageNumbers>(0);
 
   const handlePage = (pageNumber: PageNumbers) => {
@@ -32,35 +33,34 @@ const HomeLayout = () => {
   };
 
   return (
-    <Container
-      display="grid"
-      maxW={{ base: "80vw" }}
-      gridTemplateColumns="1fr 0.7fr"
-      gap={10}
-    >
-      <Tabs index={page}>
-        <Heading fontFamily="Poppins" fontSize="1.5rem" mt="2rem" mb="1rem">
+    <Box w="100%">
+      <Container maxW="1200px">
+        <Heading fontFamily="Poppins" fontSize="1.5rem" my="2rem">
           Create Candidate Requisition
         </Heading>
-        <TabList>
-          <CustomTab>Requistion Details</CustomTab>
-          <CustomTab>Job Details</CustomTab>
-          <CustomTab>Interview Settings</CustomTab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <RequistionForm />
-          </TabPanel>
-          <TabPanel>
-            <JobDetails />
-          </TabPanel>
-          <TabPanel>
-            <InterviewSettings />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-      <DisplayCard />
-    </Container>
+        <Tabs index={page} isLazy lazyBehavior="keepMounted">
+          <TabList>
+            <CustomTab>Requistion Details</CustomTab>
+            <CustomTab>Job Details</CustomTab>
+            <CustomTab>Interview Settings</CustomTab>
+          </TabList>
+          <Grid display="grid" gridTemplateColumns="3fr 2fr" gap="24px">
+            <TabPanels>
+              <TabPanel>
+                <RequisitionForm handleTab={handlePage} />
+              </TabPanel>
+              <TabPanel>
+                <JobDetailsForm handleTab={handlePage} />
+              </TabPanel>
+              <TabPanel>
+                <InterviewSettingsForm handleTab={handlePage} />
+              </TabPanel>
+            </TabPanels>
+            <DisplayCard />
+          </Grid>
+        </Tabs>
+      </Container>
+    </Box>
   );
 };
 

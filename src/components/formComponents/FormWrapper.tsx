@@ -34,12 +34,12 @@ const FromWrapper: React.FC<IFormWrapperProps> = ({
         {children}
       </InputGroup>
       {error && touched && (
-        <FormErrorMessage color="errorRed" fontSize=".75rem">
+        <FormErrorMessage color="red" fontSize=".75rem">
           {error}
         </FormErrorMessage>
       )}
       {helperText && (
-        <FormHelperText fontSize="0.75rem" color="text.formLabel">
+        <FormHelperText fontSize="0.75rem" color="gray.400">
           {helperText}
         </FormHelperText>
       )}

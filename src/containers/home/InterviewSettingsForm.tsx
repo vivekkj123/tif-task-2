@@ -1,149 +1,84 @@
-import React, { ChangeEvent } from "react";
-import {
-  FormControl,
-  Input,
-  Button,
-  Flex,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from "@chakra-ui/react";
-import { FormElement, CustomFormLabel } from "../../components/library";
+import { Button, Flex, Box } from "@chakra-ui/react";
+import React from "react";
+import FormSelect from "../../components/formComponents/FormSelect";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { addData } from "../../store/formSlice";
-import * as Yup from "yup";
+import { PageNumbers } from "../../interface/home";
+import { IInterViewSettings } from "../../interface/forms";
+import {
+  interviewDurationOptions,
+  interviewLanguageOptions,
+  interviewModeOptions,
+} from "./constants";
 
-interface InterViewSettingsValues {
-  interviewMode: string;
-  interviewDuration: string;
-  interviewLanguage: string;
-}
-
-const interviewValidationSchema = Yup.object().shape({
-  interviewMode: Yup.string().required("This field is required"),
-  interviewDuration: Yup.string().required("This field is required"),
-  interviewLanguage: Yup.string().required("This field is required"),
-});
-
-const InterviewSettings = () => {
-  const dispatch = useDispatch();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { handleChange, handleSubmit, errors } =
-    useFormik<InterViewSettingsValues>({
-      initialValues: {
-        interviewMode: "",
-        interviewDuration: "",
-        interviewLanguage: "",
-      },
-      validationSchema: interviewValidationSchema,
-      onSubmit(values, formikHelpers) {
-        // console.log(values);
-        // dispatch(
-        //   addData({
-        //     type: "interviewSettings",
-        //     data: values,
-        //   })
-        // );
-      },
-    });
-
-  const updateReduxOnChange = (
-    event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    handleChange(event);
-  };
+const InterviewDetailsForm: React.FC<{
+  handleTab: (n: PageNumbers) => void;
+}> = ({ handleTab }) => {
+  const {
+    errors,
+    touched,
+    handleSubmit,
+    values,
+    setFieldTouched,
+    setFieldValue,
+  } = useFormik<IInterViewSettings>({
+    initialValues: {
+      interviewMode: "",
+      interviewDuration: "",
+      interviewLanguage: "",
+    },
+    onSubmit: (values) => {
+      console.log({ values });
+      alert("Form successfully submitted");
+    },
+  });
 
   return (
-    <>
-      <FormControl
-        as="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        <FormElement isInvalid={errors.interviewMode}>
-          <CustomFormLabel label="Interview Mode" />
-          <Input
-            name="interviewMode"
-            id="interviewMode"
-            onChange={updateReduxOnChange}
-            type="text"
-          />
-        </FormElement>
-        <FormElement isInvalid={errors.interviewDuration}>
-          <CustomFormLabel label="Interview Duration" />
-          <Input
-            name="interviewDuration"
-            id="interviewDuration"
-            onChange={updateReduxOnChange}
-            type="text"
-          />
-        </FormElement>
-        <FormElement isInvalid={errors.interviewLanguage}>
-          <CustomFormLabel label="Interview Language" />
-          <Input
-            name="interviewLanguage"
-            id="interviewLanguage"
-            onChange={updateReduxOnChange}
-            type="text"
-          />
-        </FormElement>
-
-        <Flex w="fit-content" m="0rem 0rem 0rem auto" mt="4rem">
-          <Button
-            color="white"
-            bgColor="#AA85C5"
-            mr="1rem"
-            type="button"
-            w="10rem"
-            _hover={{
-              bgColor: "#6B1AB4",
-            }}
-          >
+    <Box width="100%" as="form" onSubmit={handleSubmit as any}>
+      <Box width="100%">
+        <FormSelect
+          label="Interview Mode"
+          placeholder="Select interview mode"
+          name="interviewMode"
+          options={interviewModeOptions}
+          onChange={setFieldValue}
+          onBlur={setFieldTouched}
+          value={values?.interviewMode}
+          error={errors?.interviewMode}
+          touched={touched?.interviewMode}
+        />
+        <FormSelect
+          label="Interview Duration"
+          placeholder="Select interview duration"
+          name="interviewDuration"
+          options={interviewDurationOptions}
+          onChange={setFieldValue}
+          onBlur={setFieldTouched}
+          value={values?.interviewDuration}
+          error={errors?.interviewDuration}
+          touched={touched?.interviewDuration}
+        />
+        <FormSelect
+          label="Job Location"
+          name="interviewLanguage"
+          placeholder="Select interview language"
+          options={interviewLanguageOptions}
+          onChange={setFieldValue}
+          onBlur={setFieldTouched}
+          error={errors.interviewLanguage}
+          touched={touched.interviewLanguage}
+          value={values.interviewLanguage}
+        />
+        <Flex w="100%" justify="flex-end" mt="4rem" gap="20px">
+          <Button colorScheme="gray" type="button" onClick={() => handleTab(1)}>
             Previous
           </Button>
-          <Button
-            color="white"
-            bgColor="#EA7A7A"
-            type="submit"
-            w="10rem"
-            onClick={onOpen}
-            _hover={{
-              bgColor: "#ED4646",
-            }}
-            disabled={Object.keys(errors).length === 0 ? false : true}
-          >
+          <Button colorScheme="red" type="submit">
             Submit
           </Button>
         </Flex>
-      </FormControl>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Thank You! 😊</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Your Job Application was submitted successfully 🎉.
-            <br />
-            Candidates will be able to apply for your open jobs now. Happy
-            Hiring! 🎉
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+      </Box>
+    </Box>
   );
 };
 
-export default InterviewSettings;
+export default InterviewDetailsForm;

@@ -49,3 +49,23 @@ export interface IInterviewSettingsValues {
   interviewDuration: string;
   interviewLanguage: string;
 }
+
+
+export interface IInterViewSettings {
+  interviewMode: string;
+  interviewDuration: string;
+  interviewLanguage: string;
+}
+
+export interface IJobDetails {
+  jobTitle: string;
+  jobDetails: string;
+  jobLocation: string;
+}
+
+export interface IRequisitionDetails {
+  requisitionTitle: string;
+  noOfOpenings: number;
+  urgency: string;
+  gender: string;
+}

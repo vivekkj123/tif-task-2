@@ -30,7 +30,7 @@ const FormSelect: React.FC<IFormSelectProps> = ({
   const theme = useTheme();
 
   const handleChange = (value: any) => {
-    onChange && onChange(name, value);
+    onChange && onChange(name, value?.value);
   };
   const handleBlur = () => {
     onBlur && onBlur(name, true);
@@ -43,11 +43,12 @@ const FormSelect: React.FC<IFormSelectProps> = ({
       helperText={helperText}
       label={label}
       error={error as string}
+      touched={touched}
     >
       <ReactSelect
         name={name}
         placeholder={placeholder}
-        value={value}
+        value={options.find((item: { value: string }) => item?.value === value)}
         onChange={handleChange}
         onBlur={handleBlur}
         options={options}
