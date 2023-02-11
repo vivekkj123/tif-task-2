@@ -9,6 +9,7 @@ import {
   interviewLanguageOptions,
   interviewModeOptions,
 } from "./constants";
+import * as Yup from "yup";
 
 const InterviewDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
@@ -26,6 +27,11 @@ const InterviewDetailsForm: React.FC<{
       interviewDuration: "",
       interviewLanguage: "",
     },
+    validationSchema: Yup.object().shape({
+      interviewMode: Yup.string().required("Interview Mode is required"),
+      interviewDuration: Yup.string().required("Interview Duration is required"),
+      interviewLanguage: Yup.string().required("Interview Langauge is required"),
+    }),
     onSubmit: (values) => {
       console.log({ values });
       alert("Form successfully submitted");
@@ -58,7 +64,7 @@ const InterviewDetailsForm: React.FC<{
           touched={touched?.interviewDuration}
         />
         <FormSelect
-          label="Job Location"
+          label="Interview Language"
           name="interviewLanguage"
           placeholder="Select interview language"
           options={interviewLanguageOptions}
