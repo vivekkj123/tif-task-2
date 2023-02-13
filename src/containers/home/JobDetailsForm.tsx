@@ -1,5 +1,5 @@
 import { Button, Flex, Box } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import FormInput from "../../components/formComponents/FormInput";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,7 +8,8 @@ import { IJobDetails } from "../../interface/forms";
 
 const JobDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
-}> = ({ handleTab }) => {
+  setJobDetails: React.Dispatch<React.SetStateAction<IJobDetails>>;
+}> = ({ handleTab, setJobDetails }) => {
   const { handleChange, errors, touched, handleBlur, handleSubmit, values } =
     useFormik<IJobDetails>({
       initialValues: {
@@ -26,7 +27,10 @@ const JobDetailsForm: React.FC<{
         handleTab(2);
       },
     });
-
+  useEffect(() => {
+    setJobDetails(values);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
   return (
     <Box width="100%" as="form" onSubmit={handleSubmit as any}>
       <Box width="100%">

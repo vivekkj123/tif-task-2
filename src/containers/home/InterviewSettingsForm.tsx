@@ -1,5 +1,5 @@
 import { Button, Flex, Box } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import FormSelect from "../../components/formComponents/FormSelect";
 import { useFormik } from "formik";
 import { PageNumbers } from "../../interface/home";
@@ -13,7 +13,8 @@ import * as Yup from "yup";
 
 const InterviewDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
-}> = ({ handleTab }) => {
+  setInterviewDetails: React.Dispatch<React.SetStateAction<IInterViewSettings>>;
+}> = ({ handleTab, setInterviewDetails }) => {
   const {
     errors,
     touched,
@@ -29,15 +30,22 @@ const InterviewDetailsForm: React.FC<{
     },
     validationSchema: Yup.object().shape({
       interviewMode: Yup.string().required("Interview Mode is required"),
-      interviewDuration: Yup.string().required("Interview Duration is required"),
-      interviewLanguage: Yup.string().required("Interview Langauge is required"),
+      interviewDuration: Yup.string().required(
+        "Interview Duration is required"
+      ),
+      interviewLanguage: Yup.string().required(
+        "Interview Langauge is required"
+      ),
     }),
     onSubmit: (values) => {
       console.log({ values });
       alert("Form successfully submitted");
     },
   });
-
+  useEffect(() => {
+    setInterviewDetails(values);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
   return (
     <Box width="100%" as="form" onSubmit={handleSubmit as any}>
       <Box width="100%">
